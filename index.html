@@ -383,6 +383,42 @@
   </div>
 
   <!-- ==========================================
+       ÁREA RESTRITA — reautenticação por senha
+       (exigida antes de abrir a Equipe e futuros
+       itens dessa seção do admin)
+       ========================================== -->
+  <div id="adminUnlockModal" class="modal-overlay">
+    <div class="modal">
+      <form id="adminUnlockForm">
+        <div class="modal-header">
+          <div class="modal-header-icon">🔒</div>
+          <h3>Área Restrita</h3>
+          <p>Confirme sua senha para continuar. Isso é pedido de novo por segurança, mesmo você já estando logado.</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="adminUnlockPassword">Senha</label>
+          <div class="form-input-wrap">
+            <span class="input-icon">🔒</span>
+            <input
+              id="adminUnlockPassword"
+              class="form-input"
+              type="password"
+              placeholder="••••••••"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="adminUnlockCancelBtn">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="adminUnlockSubmitBtn" style="width:auto">Confirmar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================
        APP LAYOUT (After Login)
        ========================================== -->
   <div id="appLayout" class="app-layout">
@@ -422,23 +458,24 @@
           <span class="sidebar-item-badge" id="messagesBadge" style="display:none">1</span>
         </div>
 
-        <!-- Cadastrar Veículo (with submenu) -->
-        <div
-          class="sidebar-item"
-          id="navVehicles"
-        >
-          <span class="sidebar-item-icon">🚗</span>
-          <span class="sidebar-item-text">Cadastrar Veículo</span>
-          <span class="sidebar-item-chevron">▶</span>
+        <div class="sidebar-section-label">Contexto</div>
+
+        <!-- Seletor de contexto: Minha Conta (pessoal) x Empresas -->
+        <div class="sidebar-context">
+          <select id="contextSwitcher" class="context-select"></select>
         </div>
 
-        <div class="sidebar-submenu" id="vehiclesSubmenu">
-          <div class="sidebar-subitem" data-page="createFleet" id="navCreateFleet">
-            Criar Frota
-          </div>
-          <div class="sidebar-subitem" data-page="registerVehicle" id="navRegisterVehicle">
-            Cadastrar Veículo Particular
-          </div>
+        <!-- Veículos (lista se adapta ao contexto selecionado) -->
+        <div class="sidebar-item" data-page="vehicles" id="navVehicles">
+          <span class="sidebar-item-icon">🚗</span>
+          <span class="sidebar-item-text">Veículos</span>
+        </div>
+
+        <div class="sidebar-section-label">Empresa</div>
+
+        <div class="sidebar-item" data-page="createCompany" id="navCreateCompany">
+          <span class="sidebar-item-icon">🏢</span>
+          <span class="sidebar-item-text">Criar Empresa</span>
         </div>
 
         <div class="sidebar-section-label">Sistema</div>
@@ -455,10 +492,20 @@
           <span class="sidebar-item-text">Relatórios</span>
         </div>
 
-        <!-- Configurações -->
-        <div class="sidebar-item" data-page="settings" id="navSettings">
+        <!-- Configurações (com submenu) -->
+        <div class="sidebar-item" id="navSettings">
           <span class="sidebar-item-icon">⚙</span>
           <span class="sidebar-item-text">Configurações</span>
+          <span class="sidebar-item-chevron">▶</span>
+        </div>
+
+        <div class="sidebar-submenu" id="settingsSubmenu">
+          <div class="sidebar-subitem" data-page="settingsAccount" id="navSettingsAccount">
+            Conta
+          </div>
+          <div class="sidebar-subitem" data-page="settingsPlans" id="navSettingsPlans">
+            Planos
+          </div>
         </div>
 
         <!-- Administração (só aparece para MASTER_ADMIN) -->
@@ -681,100 +728,105 @@
           <div id="messagesList" class="messages-list"></div>
         </div>
 
-        <!-- ===================== CRIAR FROTA VIEW ===================== -->
-        <div id="pageCreateFleet" class="page-view">
+        <!-- ===================== CRIAR EMPRESA VIEW ===================== -->
+        <div id="pageCreateCompany" class="page-view">
           <div class="page-header">
             <div>
-              <h2>Criar Nova Frota</h2>
-              <p>Cadastre uma nova frota para agrupar e gerenciar seus veículos.</p>
+              <h2>Criar Empresa</h2>
+              <p>Crie um ambiente separado da sua conta pessoal para gerenciar veículos profissionalmente.</p>
             </div>
             <button class="btn btn-secondary" data-page="dashboard">← Voltar</button>
           </div>
 
           <div class="form-card">
-            <div class="form-card-title">Dados da Frota</div>
-            <form id="createFleetForm">
+            <div class="form-card-title">Dados da Empresa</div>
+            <form id="createCompanyForm">
               <div class="form-grid">
                 <div class="form-group full-width">
-                  <label class="form-label" for="fleetName">Nome da Frota</label>
+                  <label class="form-label" for="companyName">Nome</label>
                   <input
-                    id="fleetName"
+                    id="companyName"
                     class="form-input"
                     type="text"
-                    placeholder="Ex: Frota de Entregas Zona Sul"
+                    placeholder="Ex: Transportadora XYZ"
                     required
                   >
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label" for="fleetType">Tipo de Frota</label>
-                  <select id="fleetType" class="form-select" required>
-                    <option value="" disabled selected>Selecione o tipo</option>
-                    <option value="delivery">Entrega</option>
-                    <option value="transport">Transporte de Passageiros</option>
-                    <option value="cargo">Carga Pesada</option>
-                    <option value="executive">Executivo</option>
-                    <option value="service">Serviço / Operacional</option>
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label" for="fleetManager">Responsável</label>
+                  <label class="form-label" for="companyLegalName">Razão Social</label>
                   <input
-                    id="fleetManager"
+                    id="companyLegalName"
                     class="form-input"
                     type="text"
-                    placeholder="Nome do gerente responsável"
-                    required
+                    placeholder="Razão social (opcional)"
                   >
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label" for="fleetBase">Base / Filial</label>
+                  <label class="form-label" for="companyDocument">CNPJ</label>
                   <input
-                    id="fleetBase"
+                    id="companyDocument"
                     class="form-input"
                     type="text"
-                    placeholder="Ex: Filial Centro — SP"
+                    inputmode="numeric"
+                    placeholder="00.000.000/0000-00"
+                    maxlength="18"
                   >
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label" for="fleetPhone">Telefone de Contato</label>
+                  <label class="form-label" for="companyEmail">E-mail</label>
                   <input
-                    id="fleetPhone"
+                    id="companyEmail"
+                    class="form-input"
+                    type="email"
+                    placeholder="contato@empresa.com"
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="companyPhone">Telefone</label>
+                  <input
+                    id="companyPhone"
                     class="form-input"
                     type="tel"
                     placeholder="(11) 99999-0000"
                   >
                 </div>
-
-                <div class="form-group full-width">
-                  <label class="form-label" for="fleetDesc">Observações</label>
-                  <textarea
-                    id="fleetDesc"
-                    class="form-textarea"
-                    placeholder="Informações adicionais sobre a frota..."
-                  ></textarea>
-                </div>
               </div>
+
+              <p class="auth-step-note">A empresa começa no plano gratuito (Company Free). Upgrades de plano ficam para uma fase futura.</p>
 
               <div class="form-actions">
                 <button type="button" class="btn btn-secondary" data-page="dashboard">Cancelar</button>
-                <button type="submit" class="btn btn-primary" style="width:auto">Criar Frota</button>
+                <button type="submit" class="btn btn-primary" style="width:auto">Criar Empresa</button>
               </div>
             </form>
           </div>
         </div>
 
-        <!-- ===================== CADASTRAR VEÍCULO PARTICULAR VIEW ===================== -->
+        <!-- ===================== VEÍCULOS VIEW (lista, adapta ao contexto) ===================== -->
+        <div id="pageVehicles" class="page-view">
+          <div class="page-header">
+            <div>
+              <h2>Veículos</h2>
+              <p id="vehiclesContextLabel">Veículos da sua conta pessoal.</p>
+            </div>
+            <button class="btn btn-primary" style="width:auto" id="btnAddVehicle">+ Adicionar Veículo</button>
+          </div>
+
+          <div id="vehiclesList" class="vehicles-grid"></div>
+        </div>
+
+        <!-- ===================== ADICIONAR/EDITAR VEÍCULO VIEW ===================== -->
         <div id="pageRegisterVehicle" class="page-view">
           <div class="page-header">
             <div>
-              <h2>Cadastrar Veículo Particular</h2>
-              <p>Adicione um veículo particular ao sistema para controle de manutenção.</p>
+              <h2 id="registerVehicleTitle">Adicionar Veículo</h2>
+              <p id="registerVehicleDesc">Adicione um veículo à sua conta pessoal.</p>
             </div>
-            <button class="btn btn-secondary" data-page="dashboard">← Voltar</button>
+            <button class="btn btn-secondary" data-page="vehicles">← Voltar</button>
           </div>
 
           <div class="form-card">
@@ -826,13 +878,18 @@
 
                 <div class="form-group">
                   <label class="form-label" for="vehiclePlate">Placa</label>
-                  <input
-                    id="vehiclePlate"
-                    class="form-input"
-                    type="text"
-                    placeholder="ABC-1D23"
-                    required
-                  >
+                  <div style="display:flex; gap:8px; align-items:center;">
+                    <input
+                      id="vehiclePlate"
+                      class="form-input"
+                      type="text"
+                      placeholder="ABC-1D23"
+                      required
+                      style="flex:1"
+                    >
+                    <button type="button" class="btn btn-secondary" id="lookupPlateBtn" style="width:auto; white-space:nowrap;">Buscar</button>
+                  </div>
+                  <small id="lookupPlateStatus" style="display:block; margin-top:4px; color:var(--text-muted, #888);"></small>
                 </div>
 
                 <div class="form-group">
@@ -870,7 +927,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label" for="vehicleChassis">Chassi (RENAVAM)</label>
+                  <label class="form-label" for="vehicleChassis">Chassi</label>
                   <input
                     id="vehicleChassis"
                     class="form-input"
@@ -879,30 +936,21 @@
                   >
                 </div>
 
-                <div class="form-group full-width">
-                  <label class="form-label" for="vehicleOwner">Proprietário</label>
+                <div class="form-group">
+                  <label class="form-label" for="vehicleRenavam">RENAVAM</label>
                   <input
-                    id="vehicleOwner"
+                    id="vehicleRenavam"
                     class="form-input"
                     type="text"
-                    placeholder="Nome completo do proprietário"
-                    required
+                    inputmode="numeric"
+                    placeholder="Número do RENAVAM"
                   >
-                </div>
-
-                <div class="form-group full-width">
-                  <label class="form-label" for="vehicleNotes">Observações</label>
-                  <textarea
-                    id="vehicleNotes"
-                    class="form-textarea"
-                    placeholder="Informações adicionais sobre o veículo..."
-                  ></textarea>
                 </div>
               </div>
 
               <div class="form-actions">
-                <button type="button" class="btn btn-secondary" data-page="dashboard">Cancelar</button>
-                <button type="submit" class="btn btn-primary" style="width:auto">Cadastrar Veículo</button>
+                <button type="button" class="btn btn-secondary" data-page="vehicles">Cancelar</button>
+                <button type="submit" class="btn btn-primary" style="width:auto" id="registerVehicleSubmitBtn">Cadastrar Veículo</button>
               </div>
             </form>
           </div>
@@ -946,12 +994,12 @@
           </div>
         </div>
 
-        <!-- ===================== CONFIGURAÇÕES VIEW ===================== -->
-        <div id="pageSettings" class="page-view">
+        <!-- ===================== CONFIGURAÇÕES › CONTA VIEW ===================== -->
+        <div id="pageSettingsAccount" class="page-view">
           <div class="page-header">
             <div>
-              <h2>Configurações</h2>
-              <p>Ajuste as configurações do sistema.</p>
+              <h2>Conta</h2>
+              <p>Seus dados de cadastro na plataforma.</p>
             </div>
           </div>
 
@@ -979,89 +1027,361 @@
           </div>
         </div>
 
+        <!-- ===================== CONFIGURAÇÕES › PLANOS VIEW ===================== -->
+        <div id="pageSettingsPlans" class="page-view">
+          <div class="page-header">
+            <div>
+              <h2>Planos</h2>
+              <p id="plansContextLabel">Plano da sua conta pessoal.</p>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-card-header">
+              <h3 id="planName">—</h3>
+              <span class="status-badge active" id="planTypeBadge">—</span>
+            </div>
+            <div class="section-card-body">
+              <div id="planUsageList" class="plan-usage-list"></div>
+              <p class="auth-step-note" style="margin-top:1.25rem;">Upgrade de plano ainda não está disponível — fica para uma fase futura.</p>
+            </div>
+          </div>
+        </div>
+
       </main>
     </div>
   </div>
 
   <!-- ==========================================
        ADMIN LAYOUT — área separada da plataforma
-       (só acessível para MASTER_ADMIN; tela limpa,
-       sem o menu/sidebar do sistema de frotas)
+       (só acessível para MASTER_ADMIN; sidebar própria,
+       no mesmo padrão visual da tela do usuário)
        ========================================== -->
   <div id="adminLayout" class="admin-layout">
-    <header class="admin-topbar">
-      <div class="admin-topbar-brand">
-        <div class="admin-topbar-icon">🛡</div>
-        <div>
-          <h1>Administração</h1>
-          <span>FleetControl — painel da plataforma</span>
-        </div>
-      </div>
-      <div class="admin-topbar-actions">
-        <button class="btn btn-secondary" style="width:auto" id="adminBackBtn">← Voltar ao sistema</button>
-        <button class="sidebar-logout" id="adminLogoutBtn" title="Sair">⏻</button>
-      </div>
-    </header>
 
-    <main class="admin-content">
-      <div class="dashboard-grid">
-        <div class="stat-card">
-          <div class="stat-header"><div class="stat-icon">👥</div></div>
-          <div class="stat-value" id="adminStatUsers">—</div>
-          <div class="stat-label">Usuários na Plataforma</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-header"><div class="stat-icon">🏢</div></div>
-          <div class="stat-value" id="adminStatCompanies">—</div>
-          <div class="stat-label">Empresas Cadastradas</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-header"><div class="stat-icon">🚗</div></div>
-          <div class="stat-value" id="adminStatVehicles">—</div>
-          <div class="stat-label">Veículos Cadastrados</div>
+    <!-- Sidebar overlay for mobile -->
+    <div id="adminSidebarOverlay" class="sidebar-overlay"></div>
+
+    <!-- Sidebar -->
+    <aside id="adminSidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <div class="sidebar-brand-icon">🛡</div>
+          <div class="sidebar-brand-text">
+            <h2>FleetControl</h2>
+            <span>Administração</span>
+          </div>
         </div>
       </div>
 
-      <div class="dashboard-sections">
-        <div class="section-card">
-          <div class="section-card-header">
-            <h3>Empresas</h3>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Menu Principal</div>
+
+        <div class="sidebar-item active" data-adminpage="dashboard" id="navAdminDashboard">
+          <span class="sidebar-item-icon">📊</span>
+          <span class="sidebar-item-text">Dashboard</span>
+        </div>
+
+        <div class="sidebar-item" data-adminpage="plans" id="navAdminPlans">
+          <span class="sidebar-item-icon">💳</span>
+          <span class="sidebar-item-text">Planos</span>
+        </div>
+
+        <div class="sidebar-item" data-adminpage="apis" id="navAdminApis">
+          <span class="sidebar-item-icon">🔌</span>
+          <span class="sidebar-item-text">APIs</span>
+        </div>
+
+        <div class="sidebar-item" data-adminpage="communication" id="navAdminCommunication">
+          <span class="sidebar-item-icon">💬</span>
+          <span class="sidebar-item-text">Comunicação</span>
+        </div>
+
+        <!-- Área Restrita — cada item aqui exige permissão própria
+             (admin_permissions) além de reconfirmar a senha ao entrar. -->
+        <div class="sidebar-section-label">🔒 Área Restrita</div>
+
+        <div class="sidebar-item" data-adminpage="team" id="navAdminTeam">
+          <span class="sidebar-item-icon">👥</span>
+          <span class="sidebar-item-text">Equipe</span>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">🛡</div>
+          <div class="sidebar-user-info">
+            <h4>Administração</h4>
+            <span>Painel da plataforma</span>
           </div>
-          <div class="section-card-body">
-            <table class="activity-table">
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>Plano</th>
-                  <th>Status</th>
-                  <th>Criada em</th>
-                </tr>
-              </thead>
-              <tbody id="adminCompaniesTable"></tbody>
-            </table>
+          <button class="sidebar-logout" id="adminLogoutBtn" title="Sair">⏻</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <header class="admin-topbar">
+        <div class="topbar-left">
+          <button class="topbar-hamburger" id="adminHamburgerBtn">☰</button>
+          <div class="topbar-title">
+            <h1 id="adminPageTitle">Dashboard</h1>
+            <div class="topbar-breadcrumb" id="adminPageBreadcrumb">Administração › Dashboard</div>
+          </div>
+        </div>
+        <div class="admin-topbar-actions">
+          <button class="btn btn-secondary" style="width:auto" id="adminBackBtn">← Voltar ao sistema</button>
+        </div>
+      </header>
+
+      <main class="admin-content">
+
+        <!-- ===================== ADMIN DASHBOARD VIEW ===================== -->
+        <div id="adminPageDashboard" class="page-view active">
+          <div class="dashboard-grid">
+            <div class="stat-card">
+              <div class="stat-header"><div class="stat-icon">👥</div></div>
+              <div class="stat-value" id="adminStatUsers">—</div>
+              <div class="stat-label">Usuários na Plataforma</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-header"><div class="stat-icon">🏢</div></div>
+              <div class="stat-value" id="adminStatCompanies">—</div>
+              <div class="stat-label">Empresas Cadastradas</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-header"><div class="stat-icon">🚗</div></div>
+              <div class="stat-value" id="adminStatVehicles">—</div>
+              <div class="stat-label">Veículos Cadastrados</div>
+            </div>
+          </div>
+
+          <div class="dashboard-sections">
+            <div class="section-card">
+              <div class="section-card-header">
+                <h3>Empresas</h3>
+              </div>
+              <div class="section-card-body">
+                <table class="activity-table">
+                  <thead>
+                    <tr>
+                      <th>Nome</th>
+                      <th>Plano</th>
+                      <th>Status</th>
+                      <th>Criada em</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminCompaniesTable"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="section-card">
+              <div class="section-card-header">
+                <h3>Usuários</h3>
+              </div>
+              <div class="section-card-body">
+                <table class="activity-table">
+                  <thead>
+                    <tr>
+                      <th>Nome</th>
+                      <th>E-mail</th>
+                      <th>Status</th>
+                      <th>Cadastrado em</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminUsersTable"></tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="section-card">
-          <div class="section-card-header">
-            <h3>Usuários</h3>
+        <!-- ===================== ADMIN PLANOS VIEW ===================== -->
+        <div id="adminPagePlans" class="page-view">
+          <div class="page-header">
+            <div>
+              <h2>Planos</h2>
+              <p>Planos e limites disponíveis na plataforma (pessoais e de empresa).</p>
+            </div>
           </div>
-          <div class="section-card-body">
-            <table class="activity-table">
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>E-mail</th>
-                  <th>Status</th>
-                  <th>Cadastrado em</th>
-                </tr>
-              </thead>
-              <tbody id="adminUsersTable"></tbody>
-            </table>
+          <div class="section-card">
+            <div class="section-card-header">
+              <h3>Planos</h3>
+            </div>
+            <div class="section-card-body">
+              <table class="activity-table">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Tipo</th>
+                    <th>Veículos</th>
+                    <th>Usuários</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="adminPlansTable"></tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
-    </main>
+
+        <!-- ===================== ADMIN APIS VIEW ===================== -->
+        <div id="adminPageApis" class="page-view">
+          <div class="page-header">
+            <div>
+              <h2>APIs</h2>
+              <p>Gerencie integrações e chaves de API da plataforma.</p>
+            </div>
+          </div>
+          <div class="section-card">
+            <div class="section-card-header">
+              <h3>AUTOSAVE — Busca de placa</h3>
+              <span id="autosaveKeyStatus" class="status-badge pending">—</span>
+            </div>
+            <div class="section-card-body">
+              <p style="font-size:.85rem; color: var(--clr-gray-300); margin-bottom:1rem;">
+                Chave usada pela function <code>lookup-plate</code> para consultar o AUTOSAVE
+                e preencher marca/modelo/ano/cor/combustível/chassi ao cadastrar um veículo.
+                Gerada e revogável em <code>/api-docs</code> no AUTOSAVE.
+              </p>
+              <form id="autosaveKeyForm">
+                <div class="form-group">
+                  <label class="form-label" for="autosaveApiKey">Chave de API</label>
+                  <div class="form-input-wrap">
+                    <span class="input-icon">🔑</span>
+                    <input
+                      id="autosaveApiKey"
+                      class="form-input"
+                      type="password"
+                      placeholder="ask_..."
+                      autocomplete="off"
+                    >
+                    <button type="button" class="password-toggle" id="toggleAutosaveKey" aria-label="Mostrar chave">👁</button>
+                  </div>
+                  <small id="autosaveKeyUpdatedAt" style="display:block; margin-top:4px; color: var(--clr-gray-300);"></small>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:auto" id="autosaveKeySaveBtn">Salvar chave</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-card-header">
+              <h3>AUTOSAVE — Clientes / Motoristas</h3>
+              <span id="autosaveCustomersKeyStatus" class="status-badge pending">—</span>
+            </div>
+            <div class="section-card-body">
+              <p style="font-size:.85rem; color: var(--clr-gray-300); margin-bottom:1rem;">
+                Chave separada da de veículos (o AUTOSAVE exige uma chave por recurso).
+                Dá acesso a nome, CPF/CNPJ, endereço e CNH — ainda sem uma tela no
+                FleetControl que consuma isso; guardada aqui pra quando existir.
+              </p>
+              <form id="autosaveCustomersKeyForm">
+                <div class="form-group">
+                  <label class="form-label" for="autosaveCustomersApiKey">Chave de API</label>
+                  <div class="form-input-wrap">
+                    <span class="input-icon">🔑</span>
+                    <input
+                      id="autosaveCustomersApiKey"
+                      class="form-input"
+                      type="password"
+                      placeholder="ask_..."
+                      autocomplete="off"
+                    >
+                    <button type="button" class="password-toggle" id="toggleAutosaveCustomersKey" aria-label="Mostrar chave">👁</button>
+                  </div>
+                  <small id="autosaveCustomersKeyUpdatedAt" style="display:block; margin-top:4px; color: var(--clr-gray-300);"></small>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:auto" id="autosaveCustomersKeySaveBtn">Salvar chave</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== ADMIN COMUNICAÇÃO VIEW ===================== -->
+        <div id="adminPageCommunication" class="page-view">
+          <div class="page-header">
+            <div>
+              <h2>Comunicação</h2>
+              <p>Números que recebem os avisos automáticos do sistema, por tipo de aviso.</p>
+            </div>
+          </div>
+
+          <div class="comm-tabs" style="display:flex; gap:8px; margin-bottom:1rem; border-bottom:1px solid var(--clr-gray-50);">
+            <button type="button" class="comm-tab active" data-commtab="whatsapp">📱 WhatsApp</button>
+          </div>
+
+          <div id="commTabWhatsapp" class="comm-tab-panel">
+            <div class="section-card">
+              <div class="section-card-header">
+                <h3>Números de envio</h3>
+              </div>
+              <div class="section-card-body">
+                <p style="font-size:.85rem; color: var(--clr-gray-300); margin-bottom:1rem;">
+                  Cada tipo de aviso tem seu próprio número de destino (formato DDI+DDD+número,
+                  só dígitos — ex: 5511999999999). Enviado via Boot Whats, reaproveitando a
+                  mesma conexão que o AUTOSAVE já usa (Maiszap).
+                </p>
+                <div id="whatsappRecipientsList">
+                  <div class="empty-state"><div>⏳</div><p>Carregando...</p></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== ADMIN EQUIPE VIEW (Área Restrita) ===================== -->
+        <div id="adminPageTeam" class="page-view">
+          <div class="page-header">
+            <div>
+              <h2>Equipe</h2>
+              <p>Quem tem acesso ao painel administrativo e o que cada um pode ver.</p>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-card-header">
+              <h3>Adicionar membro</h3>
+            </div>
+            <div class="section-card-body">
+              <p style="font-size:.85rem; color: var(--clr-gray-300); margin-bottom:1rem;">
+                A pessoa já precisa ter uma conta no FleetControl (cadastro comum) — aqui você só concede o acesso administrativo.
+              </p>
+              <form id="teamAddForm">
+                <div class="form-group">
+                  <label class="form-label" for="teamMemberEmail">E-mail</label>
+                  <div class="form-input-wrap">
+                    <span class="input-icon">✉</span>
+                    <input id="teamMemberEmail" class="form-input" type="email" placeholder="pessoa@email.com" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Permissões (telas do admin)</label>
+                  <div class="team-permissions-checks" id="teamAddPermissions">
+                    <label><input type="checkbox" value="dashboard"> Dashboard</label>
+                    <label><input type="checkbox" value="plans"> Planos</label>
+                    <label><input type="checkbox" value="apis"> APIs</label>
+                    <label><input type="checkbox" value="team"> Equipe</label>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:auto" id="teamAddBtn">Adicionar à equipe</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-card-header">
+              <h3>Membros atuais</h3>
+            </div>
+            <div class="section-card-body">
+              <div id="teamMembersList" class="team-members-list"></div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
   </div>
 
   <!-- Toast Container -->

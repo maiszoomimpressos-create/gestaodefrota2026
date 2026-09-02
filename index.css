@@ -319,6 +319,86 @@ ul { list-style: none; }
   cursor: pointer;
 }
 
+/* Equipe (Admin > Área Restrita) */
+.team-permissions-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.25rem;
+  margin-top: .5rem;
+}
+
+.team-permissions-checks label,
+.team-member-permissions label {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .8rem;
+  color: var(--clr-gray-500);
+  cursor: pointer;
+}
+
+.team-permissions-checks input[type="checkbox"],
+.team-member-permissions input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--clr-primary-500);
+  cursor: pointer;
+}
+
+.team-members-list {
+  display: flex;
+  flex-direction: column;
+  gap: .85rem;
+}
+
+.team-member-card {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: var(--clr-gray-25);
+  border: 1px solid var(--clr-gray-50);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+}
+
+.team-member-avatar {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--clr-primary-400), var(--clr-accent-400));
+  color: var(--clr-white);
+  font-size: .8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.team-member-info {
+  min-width: 160px;
+}
+
+.team-member-info h4 {
+  font-size: .88rem;
+  font-weight: 700;
+  color: var(--clr-gray-900);
+  margin-bottom: .1rem;
+}
+
+.team-member-info span {
+  font-size: .78rem;
+  color: var(--clr-gray-400);
+}
+
+.team-member-permissions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.1rem;
+  flex: 1;
+}
+
 .form-forgot {
   font-size: .8rem;
   color: var(--clr-primary-500);
@@ -585,12 +665,12 @@ ul { list-style: none; }
 }
 
 /* ============================================
-   ADMIN LAYOUT — área separada, tela limpa
+   ADMIN LAYOUT — mesma estrutura da tela do
+   usuário (sidebar própria + topbar + conteúdo)
    ============================================ */
 .admin-layout {
   display: none;
   min-height: 100vh;
-  flex-direction: column;
   background: var(--clr-gray-50);
 }
 
@@ -599,9 +679,9 @@ ul { list-style: none; }
 }
 
 .admin-topbar {
-  height: 72px;
-  background: var(--clr-gray-900);
-  color: var(--clr-white);
+  height: 64px;
+  background: var(--clr-white);
+  border-bottom: 1px solid var(--clr-gray-100);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -609,44 +689,13 @@ ul { list-style: none; }
   position: sticky;
   top: 0;
   z-index: 40;
-}
-
-.admin-topbar-brand {
-  display: flex;
-  align-items: center;
-  gap: .85rem;
-}
-
-.admin-topbar-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-md);
-  background: var(--clr-primary-500);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.15rem;
-}
-
-.admin-topbar-brand h1 {
-  font-size: 1.05rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-
-.admin-topbar-brand span {
-  font-size: .75rem;
-  color: var(--clr-gray-300);
+  box-shadow: var(--shadow-xs);
 }
 
 .admin-topbar-actions {
   display: flex;
   align-items: center;
   gap: 1rem;
-}
-
-.admin-topbar-actions .sidebar-logout {
-  color: var(--clr-gray-300);
 }
 
 .admin-content {
@@ -857,6 +906,30 @@ ul { list-style: none; }
 
 .sidebar-subitem.active::before {
   background: var(--clr-primary-500);
+}
+
+/* Seletor de contexto (Minha Conta x Empresa) */
+.sidebar-context {
+  padding: 0 .75rem .75rem;
+}
+
+.context-select {
+  width: 100%;
+  padding: .55rem .7rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--clr-gray-100);
+  background: var(--clr-gray-25);
+  color: var(--clr-gray-700);
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color .2s;
+}
+
+.context-select:hover,
+.context-select:focus {
+  border-color: var(--clr-primary-300, var(--clr-primary-500));
+  outline: none;
 }
 
 .sidebar-footer {
@@ -1356,6 +1429,98 @@ ul { list-style: none; }
   margin-top: .15rem;
 }
 
+/* Estado vazio genérico (Veículos, Mensagens, etc.) */
+.empty-state {
+  text-align: center;
+  padding: 3.5rem 1rem;
+  color: var(--clr-gray-300);
+}
+
+.empty-state div {
+  font-size: 2.5rem;
+  margin-bottom: .75rem;
+}
+
+/* Veículos (lista adaptada ao contexto) */
+.vehicles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.vehicle-card {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+  background: var(--clr-white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--clr-gray-100);
+  box-shadow: var(--shadow-sm);
+  padding: 1.1rem 1.25rem;
+}
+
+.vehicle-card-icon {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: var(--radius-md);
+  background: var(--clr-primary-50);
+  color: var(--clr-primary-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.vehicle-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.vehicle-card-info h4 {
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--clr-gray-900);
+  margin-bottom: .2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vehicle-card-info p {
+  font-size: .78rem;
+  color: var(--clr-gray-400);
+  margin-bottom: .45rem;
+}
+
+.vehicle-card-actions {
+  display: flex;
+  gap: .4rem;
+}
+
+.btn-icon-action {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--clr-gray-50);
+  color: var(--clr-gray-500);
+  font-size: .9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s var(--ease-out);
+}
+
+.btn-icon-action:hover {
+  background: var(--clr-gray-100);
+  color: var(--clr-gray-700);
+}
+
+.btn-icon-action.danger:hover {
+  background: var(--clr-danger-light);
+  color: var(--clr-danger);
+}
+
 /* Mensagens */
 .messages-list {
   display: flex;
@@ -1441,6 +1606,45 @@ ul { list-style: none; }
   font-size: .9rem;
   font-weight: 500;
   color: var(--clr-gray-800);
+}
+
+/* Planos (Configurações) */
+.plan-usage-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.plan-usage-item-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: .82rem;
+  color: var(--clr-gray-600);
+  margin-bottom: .4rem;
+}
+
+.plan-usage-item-head span:first-child {
+  font-weight: 600;
+  color: var(--clr-gray-800);
+}
+
+.plan-usage-bar {
+  height: 8px;
+  border-radius: 99px;
+  background: var(--clr-gray-50);
+  overflow: hidden;
+}
+
+.plan-usage-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: var(--clr-primary-500);
+  transition: width .3s var(--ease-out);
+}
+
+.plan-usage-bar-fill.full {
+  background: var(--clr-danger);
 }
 
 /* Form card */
@@ -1663,4 +1867,48 @@ ul { list-style: none; }
   .topbar {
     padding: 0 1rem;
   }
+}
+
+/* Admin > Comunicação */
+.comm-tab {
+  padding: .625rem 1rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--clr-gray-300);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.comm-tab.active {
+  color: var(--clr-primary-500);
+  border-bottom-color: var(--clr-primary-500);
+}
+
+.comm-tab-panel {
+  display: none;
+}
+
+.comm-tab-panel.active {
+  display: block;
+}
+
+.whatsapp-recipient-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--clr-gray-50);
+}
+
+.whatsapp-recipient-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.whatsapp-recipient-row .form-group {
+  flex: 1;
+  margin-bottom: 0;
 }

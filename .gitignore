@@ -2,3 +2,4 @@
 .env.local
 CREDENCIAIS.txt
 node_modules/
+supabase/.temp/
