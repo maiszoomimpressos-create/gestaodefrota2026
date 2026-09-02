@@ -1,0 +1,4 @@
+.env
+.env.local
+CREDENCIAIS.txt
+node_modules/

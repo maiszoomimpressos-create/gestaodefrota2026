@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sistema de controle de manutenção de frotas — gerencie veículos, frotas e manutenções preventivas com facilidade.">
+  <title>FleetControl — Gestão de Frotas e Manutenção</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- ==========================================
+       AUTH SCREEN
+       ========================================== -->
+  <div id="authScreen" class="auth-screen">
+    <div class="auth-left">
+      <div class="auth-brand">
+        <div class="auth-brand-logo">
+          <div class="auth-brand-icon">⚙</div>
+          <h1>FleetControl</h1>
+        </div>
+        <p>Plataforma inteligente para gestão completa de frotas e manutenção veicular. Controle preventivo, histórico e agendamento em um só lugar.</p>
+      </div>
+
+      <div class="auth-features">
+        <div class="auth-feature">
+          <div class="auth-feature-icon">🔧</div>
+          <div class="auth-feature-text">
+            <h3>Manutenção Preventiva</h3>
+            <p>Agende manutenções e receba alertas automaticamente antes dos prazos.</p>
+          </div>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">📊</div>
+          <div class="auth-feature-text">
+            <h3>Relatórios Completos</h3>
+            <p>Dashboards intuitivos com visão geral de custos e status da frota.</p>
+          </div>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">🚗</div>
+          <div class="auth-feature-text">
+            <h3>Controle por Veículo</h3>
+            <p>Histórico detalhado de cada veículo, desde óleo até revisões gerais.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-right">
+      <!-- Login Form -->
+      <div id="loginCard" class="auth-card">
+        <div class="auth-card-header">
+          <h2>Bem-vindo de volta</h2>
+          <p>Entre com suas credenciais para acessar o sistema</p>
+        </div>
+
+        <form id="loginForm" autocomplete="off">
+          <div class="form-group">
+            <label class="form-label" for="loginEmail">E-mail</label>
+            <div class="form-input-wrap">
+              <span class="input-icon">✉</span>
+              <input
+                id="loginEmail"
+                class="form-input"
+                type="email"
+                placeholder="seu@email.com"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="loginPassword">Senha</label>
+            <div class="form-input-wrap">
+              <span class="input-icon">🔒</span>
+              <input
+                id="loginPassword"
+                class="form-input"
+                type="password"
+                placeholder="••••••••"
+                required
+              >
+              <button type="button" class="password-toggle" id="togglePassword" aria-label="Mostrar senha">👁</button>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label class="form-remember">
+              <input type="checkbox" id="rememberMe">
+              Lembrar de mim
+            </label>
+            <button type="button" class="form-forgot" id="forgotPasswordBtn">Esqueci minha senha</button>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="loginBtn">
+            Entrar
+          </button>
+
+          <p class="auth-switch">Não tem uma conta? <button type="button" class="form-forgot" id="showSignupBtn">Criar conta</button></p>
+        </form>
+      </div>
+
+      <!-- Signup Form -->
+      <div id="signupCard" class="auth-card" style="display:none">
+        <div class="auth-card-header">
+          <h2>Criar conta</h2>
+          <p>Cadastre-se para começar a gerenciar sua frota</p>
+        </div>
+
+        <form id="signupForm" autocomplete="off">
+          <div class="form-group">
+            <label class="form-label" for="signupCpf">CPF</label>
+            <div class="form-input-wrap">
+              <span class="input-icon">🪪</span>
+              <input
+                id="signupCpf"
+                class="form-input"
+                type="text"
+                inputmode="numeric"
+                placeholder="000.000.000-00"
+                maxlength="14"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signupName">Nome completo</label>
+            <div class="form-input-wrap">
+              <span class="input-icon">👤</span>
+              <input
+                id="signupName"
+                class="form-input"
+                type="text"
+                placeholder="Seu nome completo"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signupEmail">E-mail</label>
+            <div class="form-input-wrap">
+              <span class="input-icon">✉</span>
+              <input
+                id="signupEmail"
+                class="form-input"
+                type="email"
+                placeholder="seu@email.com"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="signupRg">RG</label>
+              <div class="form-input-wrap">
+                <span class="input-icon">🪪</span>
+                <input
+                  id="signupRg"
+                  class="form-input"
+                  type="text"
+                  placeholder="00.000.000-0"
+                >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="signupBirthDate">Data de nascimento</label>
+              <div class="form-input-wrap">
+                <span class="input-icon">📅</span>
+                <input
+                  id="signupBirthDate"
+                  class="form-input"
+                  type="date"
+                >
+              </div>
+            </div>
+          </div>
+
+          <p class="auth-step-note">Endereço fica para a próxima etapa — você poderá preencher (ou pular) assim que entrar pela primeira vez.</p>
+
+          <div class="form-group">
+            <label class="form-label" for="signupPassword">Senha</label>
+            <div class="form-input-wrap">
+              <span class="input-icon">🔒</span>
+              <input
+                id="signupPassword"
+                class="form-input"
+                type="password"
+                placeholder="••••••••"
+                required
+              >
+              <button type="button" class="password-toggle" id="toggleSignupPassword" aria-label="Mostrar senha">👁</button>
+            </div>
+            <ul class="password-requirements" id="passwordRequirements">
+              <li data-rule="length"><span class="req-icon">○</span> Mínimo de 8 caracteres</li>
+              <li data-rule="lower"><span class="req-icon">○</span> Uma letra minúscula</li>
+              <li data-rule="upper"><span class="req-icon">○</span> Uma letra maiúscula</li>
+              <li data-rule="number"><span class="req-icon">○</span> Um número</li>
+              <li data-rule="special"><span class="req-icon">○</span> Um caractere especial (!@#$%...)</li>
+            </ul>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signupPasswordConfirm">Confirmar senha</label>
+            <div class="form-input-wrap">
+              <span class="input-icon">🔒</span>
+              <input
+                id="signupPasswordConfirm"
+                class="form-input"
+                type="password"
+                placeholder="••••••••"
+                required
+              >
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="signupBtn">
+            Criar conta
+          </button>
+
+          <p class="auth-switch">Já tem uma conta? <button type="button" class="form-forgot" id="showLoginBtn">Entrar</button></p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       FORGOT PASSWORD MODAL
+       ========================================== -->
+  <div id="forgotModal" class="modal-overlay">
+    <div class="modal">
+      <div id="forgotForm">
+        <div class="modal-header">
+          <div class="modal-header-icon">🔑</div>
+          <h3>Recuperar Senha</h3>
+          <p>Insira seu e-mail cadastrado e enviaremos as instruções para redefinir sua senha.</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="forgotEmail">E-mail</label>
+          <div class="form-input-wrap">
+            <span class="input-icon">✉</span>
+            <input
+              id="forgotEmail"
+              class="form-input"
+              type="email"
+              placeholder="seu@email.com"
+            >
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn btn-secondary" id="forgotCancelBtn">Cancelar</button>
+          <button class="btn btn-primary" id="forgotSubmitBtn" style="width:auto">Enviar Link</button>
+        </div>
+      </div>
+
+      <div id="forgotSuccess" class="modal-success">
+        <div class="modal-success-icon">✓</div>
+        <h3>E-mail Enviado!</h3>
+        <p>Verifique sua caixa de entrada e siga as instruções para redefinir sua senha.</p>
+        <div class="modal-actions" style="justify-content: center; margin-top: 1.5rem;">
+          <button class="btn btn-primary" id="forgotOkBtn" style="width:auto; min-width:140px">Entendi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       ETAPA 2 — COMPLETAR ENDEREÇO (pós-login)
+       ========================================== -->
+  <div id="addressModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-header-icon">📍</div>
+        <h3>Complete seu endereço</h3>
+        <p>Etapa 2 do cadastro — leva menos de um minuto. Você pode pular e preencher depois.</p>
+      </div>
+
+      <form id="addressForm">
+        <!-- CEP primeiro — reservado para autobusca via API do Google no futuro -->
+        <div class="form-group">
+          <label class="form-label" for="addressCep">CEP</label>
+          <div class="form-input-wrap">
+            <span class="input-icon">📍</span>
+            <input
+              id="addressCep"
+              class="form-input"
+              type="text"
+              inputmode="numeric"
+              placeholder="00000-000"
+              maxlength="9"
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="addressStreet">Logradouro</label>
+          <div class="form-input-wrap">
+            <span class="input-icon">🏠</span>
+            <input id="addressStreet" class="form-input" type="text" placeholder="Rua, avenida...">
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="addressNumber">Número</label>
+            <div class="form-input-wrap">
+              <span class="input-icon">#</span>
+              <input id="addressNumber" class="form-input" type="text" placeholder="123">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="addressComplement">Complemento</label>
+            <div class="form-input-wrap">
+              <span class="input-icon">🏢</span>
+              <input id="addressComplement" class="form-input" type="text" placeholder="Apto, bloco... (opcional)">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="addressNeighborhood">Bairro</label>
+            <div class="form-input-wrap">
+              <span class="input-icon">📍</span>
+              <input id="addressNeighborhood" class="form-input" type="text" placeholder="Bairro">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="addressCity">Cidade</label>
+            <div class="form-input-wrap">
+              <span class="input-icon">🏙</span>
+              <input id="addressCity" class="form-input" type="text" placeholder="Cidade">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="addressState">Estado</label>
+          <select id="addressState" class="form-select">
+            <option value="" selected>Selecione</option>
+            <option value="AC">Acre</option>
+            <option value="AL">Alagoas</option>
+            <option value="AP">Amapá</option>
+            <option value="AM">Amazonas</option>
+            <option value="BA">Bahia</option>
+            <option value="CE">Ceará</option>
+            <option value="DF">Distrito Federal</option>
+            <option value="ES">Espírito Santo</option>
+            <option value="GO">Goiás</option>
+            <option value="MA">Maranhão</option>
+            <option value="MT">Mato Grosso</option>
+            <option value="MS">Mato Grosso do Sul</option>
+            <option value="MG">Minas Gerais</option>
+            <option value="PA">Pará</option>
+            <option value="PB">Paraíba</option>
+            <option value="PR">Paraná</option>
+            <option value="PE">Pernambuco</option>
+            <option value="PI">Piauí</option>
+            <option value="RJ">Rio de Janeiro</option>
+            <option value="RN">Rio Grande do Norte</option>
+            <option value="RS">Rio Grande do Sul</option>
+            <option value="RO">Rondônia</option>
+            <option value="RR">Roraima</option>
+            <option value="SC">Santa Catarina</option>
+            <option value="SP">São Paulo</option>
+            <option value="SE">Sergipe</option>
+            <option value="TO">Tocantins</option>
+          </select>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="addressSkipBtn">Pular por enquanto</button>
+          <button type="submit" class="btn btn-primary" id="addressSaveBtn">Salvar endereço</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       APP LAYOUT (After Login)
+       ========================================== -->
+  <div id="appLayout" class="app-layout">
+
+    <!-- Sidebar overlay for mobile -->
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <div class="sidebar-brand-icon">⚙</div>
+          <div class="sidebar-brand-text">
+            <h2>FleetControl</h2>
+            <span>Gestão de Frotas</span>
+          </div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Menu Principal</div>
+
+        <!-- Dashboard -->
+        <div
+          class="sidebar-item active"
+          data-page="dashboard"
+          id="navDashboard"
+        >
+          <span class="sidebar-item-icon">📊</span>
+          <span class="sidebar-item-text">Dashboard</span>
+        </div>
+
+        <!-- Mensagens -->
+        <div class="sidebar-item" data-page="messages" id="navMessages">
+          <span class="sidebar-item-icon">💬</span>
+          <span class="sidebar-item-text">Mensagens</span>
+          <span class="sidebar-item-badge" id="messagesBadge" style="display:none">1</span>
+        </div>
+
+        <!-- Cadastrar Veículo (with submenu) -->
+        <div
+          class="sidebar-item"
+          id="navVehicles"
+        >
+          <span class="sidebar-item-icon">🚗</span>
+          <span class="sidebar-item-text">Cadastrar Veículo</span>
+          <span class="sidebar-item-chevron">▶</span>
+        </div>
+
+        <div class="sidebar-submenu" id="vehiclesSubmenu">
+          <div class="sidebar-subitem" data-page="createFleet" id="navCreateFleet">
+            Criar Frota
+          </div>
+          <div class="sidebar-subitem" data-page="registerVehicle" id="navRegisterVehicle">
+            Cadastrar Veículo Particular
+          </div>
+        </div>
+
+        <div class="sidebar-section-label">Sistema</div>
+
+        <!-- Manutenções -->
+        <div class="sidebar-item" data-page="maintenance" id="navMaintenance">
+          <span class="sidebar-item-icon">🔧</span>
+          <span class="sidebar-item-text">Manutenções</span>
+        </div>
+
+        <!-- Relatórios -->
+        <div class="sidebar-item" data-page="reports" id="navReports">
+          <span class="sidebar-item-icon">📋</span>
+          <span class="sidebar-item-text">Relatórios</span>
+        </div>
+
+        <!-- Configurações -->
+        <div class="sidebar-item" data-page="settings" id="navSettings">
+          <span class="sidebar-item-icon">⚙</span>
+          <span class="sidebar-item-text">Configurações</span>
+        </div>
+
+        <!-- Administração (só aparece para MASTER_ADMIN) -->
+        <div id="adminSection" style="display:none">
+          <div class="sidebar-section-label">Administração</div>
+          <div class="sidebar-item" id="navAdmin">
+            <span class="sidebar-item-icon">🛡</span>
+            <span class="sidebar-item-text">Admin</span>
+          </div>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar" id="userAvatar">JD</div>
+          <div class="sidebar-user-info">
+            <h4 id="userName">João Damião</h4>
+            <span>Administrador</span>
+          </div>
+          <button class="sidebar-logout" id="logoutBtn" title="Sair">⏻</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="topbar-hamburger" id="hamburgerBtn">☰</button>
+          <div class="topbar-title">
+            <h1 id="pageTitle">Dashboard</h1>
+            <div class="topbar-breadcrumb" id="pageBreadcrumb">Início › Dashboard</div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button class="topbar-icon-btn" title="Buscar">🔍</button>
+          <button class="topbar-icon-btn" title="Notificações" id="notifBell" data-page="messages">
+            🔔
+            <span class="topbar-badge" id="notifBadge" style="display:none"></span>
+          </button>
+        </div>
+      </header>
+
+      <main class="page-content">
+
+        <!-- ===================== DASHBOARD VIEW ===================== -->
+        <div id="pageDashboard" class="page-view active">
+          <div class="dashboard-grid">
+            <div class="stat-card">
+              <div class="stat-header">
+                <div class="stat-icon">🚗</div>
+                <span class="stat-trend up">↑ 12%</span>
+              </div>
+              <div class="stat-value">47</div>
+              <div class="stat-label">Veículos na Frota</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <div class="stat-icon">✓</div>
+                <span class="stat-trend up">↑ 5%</span>
+              </div>
+              <div class="stat-value">39</div>
+              <div class="stat-label">Veículos Ativos</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <div class="stat-icon">🔧</div>
+                <span class="stat-trend down">↓ 3%</span>
+              </div>
+              <div class="stat-value">6</div>
+              <div class="stat-label">Em Manutenção</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <div class="stat-icon">📅</div>
+                <span class="stat-trend up">↑ 8%</span>
+              </div>
+              <div class="stat-value">12</div>
+              <div class="stat-label">Agendamentos Pendentes</div>
+            </div>
+          </div>
+
+          <div class="dashboard-sections">
+            <div class="section-card">
+              <div class="section-card-header">
+                <h3>Atividade Recente</h3>
+                <button class="btn btn-ghost">Ver tudo →</button>
+              </div>
+              <div class="section-card-body">
+                <table class="activity-table">
+                  <thead>
+                    <tr>
+                      <th>Veículo</th>
+                      <th>Serviço</th>
+                      <th>Data</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="activity-vehicle">
+                          <div class="activity-vehicle-icon">🚐</div>
+                          <span class="activity-vehicle-name">Fiat Ducato</span>
+                        </div>
+                      </td>
+                      <td>Troca de óleo</td>
+                      <td>08/08/2026</td>
+                      <td><span class="status-badge active">Concluído</span></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="activity-vehicle">
+                          <div class="activity-vehicle-icon">🚛</div>
+                          <span class="activity-vehicle-name">VW Delivery</span>
+                        </div>
+                      </td>
+                      <td>Revisão geral</td>
+                      <td>10/08/2026</td>
+                      <td><span class="status-badge maintenance">Em andamento</span></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="activity-vehicle">
+                          <div class="activity-vehicle-icon">🚗</div>
+                          <span class="activity-vehicle-name">Toyota Hilux</span>
+                        </div>
+                      </td>
+                      <td>Troca de pneus</td>
+                      <td>12/08/2026</td>
+                      <td><span class="status-badge pending">Agendado</span></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="activity-vehicle">
+                          <div class="activity-vehicle-icon">🚙</div>
+                          <span class="activity-vehicle-name">Chevrolet S10</span>
+                        </div>
+                      </td>
+                      <td>Alinhamento</td>
+                      <td>06/08/2026</td>
+                      <td><span class="status-badge active">Concluído</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="section-card">
+              <div class="section-card-header">
+                <h3>Próximas Manutenções</h3>
+                <button class="btn btn-ghost">Agenda →</button>
+              </div>
+              <div class="section-card-body">
+                <div class="maintenance-list">
+                  <div class="maintenance-item">
+                    <div class="maintenance-date">
+                      <div class="maintenance-date-day">14</div>
+                      <div class="maintenance-date-month">Ago</div>
+                    </div>
+                    <div class="maintenance-info">
+                      <h4>Fiat Toro — ABC-1234</h4>
+                      <p>Troca de óleo e filtro</p>
+                    </div>
+                    <span class="maintenance-type oil">Óleo</span>
+                  </div>
+
+                  <div class="maintenance-item">
+                    <div class="maintenance-date">
+                      <div class="maintenance-date-day">18</div>
+                      <div class="maintenance-date-month">Ago</div>
+                    </div>
+                    <div class="maintenance-info">
+                      <h4>Ford Ranger — DEF-5678</h4>
+                      <p>Rodízio e calibragem</p>
+                    </div>
+                    <span class="maintenance-type tires">Pneus</span>
+                  </div>
+
+                  <div class="maintenance-item">
+                    <div class="maintenance-date">
+                      <div class="maintenance-date-day">22</div>
+                      <div class="maintenance-date-month">Ago</div>
+                    </div>
+                    <div class="maintenance-info">
+                      <h4>VW Amarok — GHI-9012</h4>
+                      <p>Revisão dos 30.000km</p>
+                    </div>
+                    <span class="maintenance-type review">Revisão</span>
+                  </div>
+
+                  <div class="maintenance-item">
+                    <div class="maintenance-date">
+                      <div class="maintenance-date-day">25</div>
+                      <div class="maintenance-date-month">Ago</div>
+                    </div>
+                    <div class="maintenance-info">
+                      <h4>Mercedes Sprinter — JKL-3456</h4>
+                      <p>Troca de pastilhas de freio</p>
+                    </div>
+                    <span class="maintenance-type tires">Freios</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== MENSAGENS VIEW ===================== -->
+        <div id="pageMessages" class="page-view">
+          <div class="page-header">
+            <div>
+              <h2>Mensagens</h2>
+              <p>Avisos do sistema e pendências da sua conta.</p>
+            </div>
+          </div>
+          <div id="messagesList" class="messages-list"></div>
+        </div>
+
+        <!-- ===================== CRIAR FROTA VIEW ===================== -->
+        <div id="pageCreateFleet" class="page-view">
+          <div class="page-header">
+            <div>
+              <h2>Criar Nova Frota</h2>
+              <p>Cadastre uma nova frota para agrupar e gerenciar seus veículos.</p>
+            </div>
+            <button class="btn btn-secondary" data-page="dashboard">← Voltar</button>
+          </div>
+
+          <div class="form-card">
+            <div class="form-card-title">Dados da Frota</div>
+            <form id="createFleetForm">
+              <div class="form-grid">
+                <div class="form-group full-width">
+                  <label class="form-label" for="fleetName">Nome da Frota</label>
+                  <input
+                    id="fleetName"
+                    class="form-input"
+                    type="text"
+                    placeholder="Ex: Frota de Entregas Zona Sul"
+                    required
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="fleetType">Tipo de Frota</label>
+                  <select id="fleetType" class="form-select" required>
+                    <option value="" disabled selected>Selecione o tipo</option>
+                    <option value="delivery">Entrega</option>
+                    <option value="transport">Transporte de Passageiros</option>
+                    <option value="cargo">Carga Pesada</option>
+                    <option value="executive">Executivo</option>
+                    <option value="service">Serviço / Operacional</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="fleetManager">Responsável</label>
+                  <input
+                    id="fleetManager"
+                    class="form-input"
+                    type="text"
+                    placeholder="Nome do gerente responsável"
+                    required
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="fleetBase">Base / Filial</label>
+                  <input
+                    id="fleetBase"
+                    class="form-input"
+                    type="text"
+                    placeholder="Ex: Filial Centro — SP"
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="fleetPhone">Telefone de Contato</label>
+                  <input
+                    id="fleetPhone"
+                    class="form-input"
+                    type="tel"
+                    placeholder="(11) 99999-0000"
+                  >
+                </div>
+
+                <div class="form-group full-width">
+                  <label class="form-label" for="fleetDesc">Observações</label>
+                  <textarea
+                    id="fleetDesc"
+                    class="form-textarea"
+                    placeholder="Informações adicionais sobre a frota..."
+                  ></textarea>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn btn-secondary" data-page="dashboard">Cancelar</button>
+                <button type="submit" class="btn btn-primary" style="width:auto">Criar Frota</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- ===================== CADASTRAR VEÍCULO PARTICULAR VIEW ===================== -->
+        <div id="pageRegisterVehicle" class="page-view">
+          <div class="page-header">
+            <div>
+              <h2>Cadastrar Veículo Particular</h2>
+              <p>Adicione um veículo particular ao sistema para controle de manutenção.</p>
+            </div>
+            <button class="btn btn-secondary" data-page="dashboard">← Voltar</button>
+          </div>
+
+          <div class="form-card">
+            <div class="form-card-title">Dados do Veículo</div>
+            <form id="registerVehicleForm">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="vehicleBrand">Marca</label>
+                  <select id="vehicleBrand" class="form-select" required>
+                    <option value="" disabled selected>Selecione a marca</option>
+                    <option value="chevrolet">Chevrolet</option>
+                    <option value="fiat">Fiat</option>
+                    <option value="ford">Ford</option>
+                    <option value="honda">Honda</option>
+                    <option value="hyundai">Hyundai</option>
+                    <option value="jeep">Jeep</option>
+                    <option value="mercedes">Mercedes-Benz</option>
+                    <option value="nissan">Nissan</option>
+                    <option value="renault">Renault</option>
+                    <option value="toyota">Toyota</option>
+                    <option value="volkswagen">Volkswagen</option>
+                    <option value="other">Outra</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="vehicleModel">Modelo</label>
+                  <input
+                    id="vehicleModel"
+                    class="form-input"
+                    type="text"
+                    placeholder="Ex: Onix, HB20, Corolla..."
+                    required
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="vehicleYear">Ano</label>
+                  <input
+                    id="vehicleYear"
+                    class="form-input"
+                    type="number"
+                    min="1990"
+                    max="2027"
+                    placeholder="2024"
+                    required
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="vehiclePlate">Placa</label>
+                  <input
+                    id="vehiclePlate"
+                    class="form-input"
+                    type="text"
+                    placeholder="ABC-1D23"
+                    required
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="vehicleColor">Cor</label>
+                  <input
+                    id="vehicleColor"
+                    class="form-input"
+                    type="text"
+                    placeholder="Ex: Prata, Preto, Branco..."
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="vehicleKm">Quilometragem Atual</label>
+                  <input
+                    id="vehicleKm"
+                    class="form-input"
+                    type="number"
+                    min="0"
+                    placeholder="Ex: 45000"
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="vehicleFuel">Combustível</label>
+                  <select id="vehicleFuel" class="form-select">
+                    <option value="" disabled selected>Selecione</option>
+                    <option value="flex">Flex</option>
+                    <option value="gasolina">Gasolina</option>
+                    <option value="etanol">Etanol</option>
+                    <option value="diesel">Diesel</option>
+                    <option value="eletrico">Elétrico</option>
+                    <option value="hibrido">Híbrido</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="vehicleChassis">Chassi (RENAVAM)</label>
+                  <input
+                    id="vehicleChassis"
+                    class="form-input"
+                    type="text"
+                    placeholder="Número do chassi"
+                  >
+                </div>
+
+                <div class="form-group full-width">
+                  <label class="form-label" for="vehicleOwner">Proprietário</label>
+                  <input
+                    id="vehicleOwner"
+                    class="form-input"
+                    type="text"
+                    placeholder="Nome completo do proprietário"
+                    required
+                  >
+                </div>
+
+                <div class="form-group full-width">
+                  <label class="form-label" for="vehicleNotes">Observações</label>
+                  <textarea
+                    id="vehicleNotes"
+                    class="form-textarea"
+                    placeholder="Informações adicionais sobre o veículo..."
+                  ></textarea>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn btn-secondary" data-page="dashboard">Cancelar</button>
+                <button type="submit" class="btn btn-primary" style="width:auto">Cadastrar Veículo</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- ===================== MANUTENÇÕES VIEW ===================== -->
+        <div id="pageMaintenance" class="page-view">
+          <div class="page-header">
+            <div>
+              <h2>Manutenções</h2>
+              <p>Gerencie o histórico e agendamentos de manutenção dos veículos.</p>
+            </div>
+          </div>
+          <div class="section-card">
+            <div class="section-card-header">
+              <h3>Em breve</h3>
+            </div>
+            <div class="section-card-body" style="text-align:center; padding:3rem; color: var(--clr-gray-300);">
+              <div style="font-size:3rem; margin-bottom:.75rem;">🔧</div>
+              <p style="font-size:.9rem;">Módulo de manutenções em desenvolvimento.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== RELATÓRIOS VIEW ===================== -->
+        <div id="pageReports" class="page-view">
+          <div class="page-header">
+            <div>
+              <h2>Relatórios</h2>
+              <p>Visualize relatórios detalhados da sua frota.</p>
+            </div>
+          </div>
+          <div class="section-card">
+            <div class="section-card-header">
+              <h3>Em breve</h3>
+            </div>
+            <div class="section-card-body" style="text-align:center; padding:3rem; color: var(--clr-gray-300);">
+              <div style="font-size:3rem; margin-bottom:.75rem;">📋</div>
+              <p style="font-size:.9rem;">Módulo de relatórios em desenvolvimento.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== CONFIGURAÇÕES VIEW ===================== -->
+        <div id="pageSettings" class="page-view">
+          <div class="page-header">
+            <div>
+              <h2>Configurações</h2>
+              <p>Ajuste as configurações do sistema.</p>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-card-header">
+              <h3>Conta</h3>
+            </div>
+            <div class="section-card-body">
+              <div id="settingsAccountInfo" class="settings-account-info"></div>
+              <div id="settingsAddressPending" style="display:none">
+                <p class="auth-step-note" style="margin-top:1rem;">📍 Seu endereço ainda não foi cadastrado.</p>
+                <button class="btn btn-secondary" style="width:auto" id="settingsCompleteAddressBtn">Completar endereço</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-card-header">
+              <h3>Em breve</h3>
+            </div>
+            <div class="section-card-body" style="text-align:center; padding:3rem; color: var(--clr-gray-300);">
+              <div style="font-size:3rem; margin-bottom:.75rem;">⚙</div>
+              <p style="font-size:.9rem;">Demais módulos de configurações em desenvolvimento.</p>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       ADMIN LAYOUT — área separada da plataforma
+       (só acessível para MASTER_ADMIN; tela limpa,
+       sem o menu/sidebar do sistema de frotas)
+       ========================================== -->
+  <div id="adminLayout" class="admin-layout">
+    <header class="admin-topbar">
+      <div class="admin-topbar-brand">
+        <div class="admin-topbar-icon">🛡</div>
+        <div>
+          <h1>Administração</h1>
+          <span>FleetControl — painel da plataforma</span>
+        </div>
+      </div>
+      <div class="admin-topbar-actions">
+        <button class="btn btn-secondary" style="width:auto" id="adminBackBtn">← Voltar ao sistema</button>
+        <button class="sidebar-logout" id="adminLogoutBtn" title="Sair">⏻</button>
+      </div>
+    </header>
+
+    <main class="admin-content">
+      <div class="dashboard-grid">
+        <div class="stat-card">
+          <div class="stat-header"><div class="stat-icon">👥</div></div>
+          <div class="stat-value" id="adminStatUsers">—</div>
+          <div class="stat-label">Usuários na Plataforma</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header"><div class="stat-icon">🏢</div></div>
+          <div class="stat-value" id="adminStatCompanies">—</div>
+          <div class="stat-label">Empresas Cadastradas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header"><div class="stat-icon">🚗</div></div>
+          <div class="stat-value" id="adminStatVehicles">—</div>
+          <div class="stat-label">Veículos Cadastrados</div>
+        </div>
+      </div>
+
+      <div class="dashboard-sections">
+        <div class="section-card">
+          <div class="section-card-header">
+            <h3>Empresas</h3>
+          </div>
+          <div class="section-card-body">
+            <table class="activity-table">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Plano</th>
+                  <th>Status</th>
+                  <th>Criada em</th>
+                </tr>
+              </thead>
+              <tbody id="adminCompaniesTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-card-header">
+            <h3>Usuários</h3>
+          </div>
+          <div class="section-card-body">
+            <table class="activity-table">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>E-mail</th>
+                  <th>Status</th>
+                  <th>Cadastrado em</th>
+                </tr>
+              </thead>
+              <tbody id="adminUsersTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
